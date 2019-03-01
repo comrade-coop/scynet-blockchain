@@ -1,18 +1,16 @@
-# OS
+# OS / IDE
 .DS_Store
 *.swp
 *.swo
 .vscode
 .idea
+*.iml
 
 # Build
 vendor
 .vendor-new
 build
 
-# IDE
-.idea/
-*.iml
-
 # GO
 *.goe
+*.pb.go
