@@ -21,8 +21,8 @@ import (
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
 
-	app "github.com/comrade-coop/scynet/blockchain"
-	agentcmd "github.com/comrade-coop/scynet/blockchain/x/agent/client"
+	app "github.com/comrade-coop/scynet-blockchain"
+	agentcmd "github.com/comrade-coop/scynet-blockchain/x/agent/client"
 )
 
 const (

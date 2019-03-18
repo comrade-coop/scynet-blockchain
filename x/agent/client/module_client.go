@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 	amino "github.com/tendermint/go-amino"
 
-	agentCli "github.com/comrade-coop/scynet/blockchain/x/agent/client/cli"
+	agentCli "github.com/comrade-coop/scynet-blockchain/x/agent/client/cli"
 )
 
 // ModuleClient exports all client functionality from this module

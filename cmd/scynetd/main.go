@@ -28,7 +28,7 @@ import (
 	dbm "github.com/tendermint/tendermint/libs/db"
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	app "github.com/comrade-coop/scynet/blockchain"
+	app "github.com/comrade-coop/scynet-blockchain"
 )
 
 var defaultNodeHome = os.ExpandEnv("$HOME/.scynetd")

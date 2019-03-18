@@ -1,0 +1,3 @@
+[submodule "protocols"]
+	path = protocols
+	url = https://github.com/comrade-coop/scynet-proto.git

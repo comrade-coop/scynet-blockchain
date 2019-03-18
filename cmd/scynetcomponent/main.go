@@ -1,8 +1,8 @@
 package main
 
-//go:generate protoc -I ../../../protocols/ ../../../protocols/Component.proto --go_out=plugins=grpc:protobufs
-//go:generate protoc -I ../../../protocols/ ../../../protocols/Hatchery.proto --go_out=plugins=grpc:protobufs
-//go:generate protoc -I ../../../protocols/ ../../../protocols/Shared.proto --go_out=plugins=grpc:protobufs
+//go:generate protoc -I ../../protocols/ ../../protocols/Component.proto --go_out=plugins=grpc:protobufs
+//go:generate protoc -I ../../protocols/ ../../protocols/Hatchery.proto --go_out=plugins=grpc:protobufs
+//go:generate protoc -I ../../protocols/ ../../protocols/Shared.proto --go_out=plugins=grpc:protobufs
 
 import (
 	"os"
@@ -16,10 +16,10 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	app "github.com/comrade-coop/scynet/blockchain"
-	agentTypes "github.com/comrade-coop/scynet/blockchain/x/agent"
-	agent "github.com/comrade-coop/scynet/blockchain/x/agent/client/facade"
-	protobufs "github.com/comrade-coop/scynet/blockchain/cmd/scynetcomponent/protobufs"
+	app "github.com/comrade-coop/scynet-blockchain"
+	agentTypes "github.com/comrade-coop/scynet-blockchain/x/agent"
+	agent "github.com/comrade-coop/scynet-blockchain/x/agent/client/facade"
+	protobufs "github.com/comrade-coop/scynet-blockchain/cmd/scynetcomponent/protobufs"
 )
 
 const (

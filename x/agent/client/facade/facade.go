@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 
-	"github.com/comrade-coop/scynet/blockchain/x/agent"
+	"github.com/comrade-coop/scynet-blockchain/x/agent"
 )
 
 // Context stores common parameters

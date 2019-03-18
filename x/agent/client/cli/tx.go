@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/comrade-coop/scynet/blockchain/x/agent"
+	"github.com/comrade-coop/scynet-blockchain/x/agent"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"

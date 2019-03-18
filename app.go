@@ -11,8 +11,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 
-	"github.com/comrade-coop/scynet/blockchain/x/agent"
-	tournament "github.com/comrade-coop/scynet/blockchain/x/tournament"
+	"github.com/comrade-coop/scynet-blockchain/x/agent"
+	tournament "github.com/comrade-coop/scynet-blockchain/x/tournament"
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
