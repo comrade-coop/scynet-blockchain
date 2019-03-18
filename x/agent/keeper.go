@@ -1,10 +1,11 @@
 package agent
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/bank"
+	"fmt"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 )
 
 // Agent - data about an agent
@@ -15,6 +16,10 @@ type Agent struct {
 	Price       sdk.Coins
 	LastScore   int
 	LastScoreAt int
+}
+
+func (a Agent) String() string {
+	return fmt.Sprintf("%s", a.Owner)
 }
 
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine

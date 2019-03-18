@@ -33,5 +33,5 @@ func queryGetAgent(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 		return []byte{}, sdk.ErrUnknownRequest("agent does not exist")
 	}
 
-	return []byte("TODO"), nil
+	return keeper.cdc.MustMarshalJSON(value), nil
 }

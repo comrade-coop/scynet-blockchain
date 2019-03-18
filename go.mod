@@ -20,9 +20,10 @@ require (
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/gogo/protobuf v1.2.1 // indirect
 	github.com/golang/lint v0.0.0-20190301231843-5614ed5bae6f // indirect
-	github.com/golang/protobuf v1.3.0 // indirect
+	github.com/golang/protobuf v1.3.0
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/pprof v0.0.0-20190228041337-2ef8d84b2e3c // indirect
+	github.com/google/uuid v1.1.1
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
 	github.com/gorilla/mux v1.7.0 // indirect
@@ -83,6 +84,7 @@ require (
 	golang.org/x/sys v0.0.0-20190306071516-a98ae47d97a5 // indirect
 	golang.org/x/tools v0.0.0-20190305160728-f8c04913dfb7 // indirect
 	google.golang.org/genproto v0.0.0-20190305195749-c21a8b77f9f0 // indirect
+	google.golang.org/grpc v1.19.0
 	honnef.co/go/tools v0.0.0-20190215041234-466a0476246c // indirect
 	sourcegraph.com/sqs/pbtypes v1.0.0 // indirect
 )

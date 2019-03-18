@@ -20,12 +20,14 @@ import (
 	auth "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
-	app "github.com/cosmos/sdk-application-tutorial"
+
+	app "github.com/comrade-coop/scynet/blockchain"
+	agentcmd "github.com/comrade-coop/scynet/blockchain/x/agent/client"
 )
 
 const (
-	storeAcc = "acc"
-	storeAgent  = "agent"
+	storeAcc   = "acc"
+	storeAgent = "agent"
 )
 
 var defaultCLIHome = os.ExpandEnv("$HOME/.nscli")
@@ -43,12 +45,12 @@ func main() {
 	config.Seal()
 
 	mc := []sdk.ModuleClients{
-		// nsclient.NewModuleClient(storeAgent, cdc),
+		agentcmd.NewModuleClient(storeAgent, cdc),
 	}
 
 	rootCmd := &cobra.Command{
-		Use:   "nscli",
-		Short: "agent Client",
+		Use:   "scynetcli",
+		Short: "ScyNet Client",
 	}
 
 	// Add --chain-id to persistent flags and mark it required
@@ -85,7 +87,7 @@ func registerRoutes(rs *lcd.RestServer) {
 	tx.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc)
 	auth.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAcc)
 	bank.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, rs.KeyBase)
-	// nsrest.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAgent)
+	// agent.RegisterRoutes(rs.CliCtx, rs.Mux, rs.Cdc, storeAgent)
 }
 
 func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
