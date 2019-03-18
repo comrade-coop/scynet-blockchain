@@ -5,21 +5,21 @@ package main
 //go:generate protoc -I ../../protocols/ ../../protocols/Shared.proto --go_out=plugins=grpc:protobufs
 
 import (
-	"os"
+	"context"
 	"fmt"
 	"log"
-	"context"
 	"net"
+	"os"
 
-	"google.golang.org/grpc"
 	"github.com/google/uuid"
+	"google.golang.org/grpc"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	app "github.com/comrade-coop/scynet-blockchain"
+	protobufs "github.com/comrade-coop/scynet-blockchain/cmd/scynetcomponent/protobufs"
 	agentTypes "github.com/comrade-coop/scynet-blockchain/x/agent"
 	agent "github.com/comrade-coop/scynet-blockchain/x/agent/client/facade"
-	protobufs "github.com/comrade-coop/scynet-blockchain/cmd/scynetcomponent/protobufs"
 )
 
 const (
@@ -41,7 +41,7 @@ func main() {
 
 	agentCtx := agent.NewContext(cdc, storeAgent)
 
-	server := componentServer {
+	server := componentServer{
 		agentCtx,
 	}
 
@@ -58,9 +58,7 @@ type componentServer struct {
 	agentCtx agent.Context
 }
 
-
-// Register a new input to the component
-
+// RegisterInput - Register a new input to the component
 func (s *componentServer) RegisterInput(c context.Context, request *protobufs.RegisterInputRequest) (*protobufs.Void, error) {
 
 	id, err := uuid.Parse(request.Input.Uuid)
@@ -75,25 +73,25 @@ func (s *componentServer) RegisterInput(c context.Context, request *protobufs.Re
 	)
 	return new(protobufs.Void), nil
 }
-// Start running a particular agent
 
+// AgentStart - Start running a particular agent
 func (s *componentServer) AgentStart(context.Context, *protobufs.AgentStartRequest) (*protobufs.Void, error) {
 	return new(protobufs.Void), nil
 }
-// Stop that agent
 
+// AgentStop - Stop that agent
 func (s *componentServer) AgentStop(context.Context, *protobufs.AgentRequest) (*protobufs.Void, error) {
 	return new(protobufs.Void), nil
 }
-// Check the status of an agent.
 
+// AgentStatus - Check the status of an agent.
 func (s *componentServer) AgentStatus(context.Context, *protobufs.AgentRequest) (*protobufs.AgentStatusResponse, error) {
 	res := new(protobufs.AgentStatusResponse)
 	res.Running = false
 	return res, nil
 }
-// Retrieve a list of running agents.
 
+// AgentList - Retrieve a list of running agents.
 func (s *componentServer) AgentList(context.Context, *protobufs.AgentQuery) (*protobufs.ListOfAgents, error) {
 	return new(protobufs.ListOfAgents), nil
 }
