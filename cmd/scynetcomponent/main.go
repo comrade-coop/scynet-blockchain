@@ -9,12 +9,13 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
 
-	"github.com/google/uuid"
-	"google.golang.org/grpc"
-
+	sdkContext "github.com/cosmos/cosmos-sdk/client/context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/google/uuid"
+	tendermintQuery "github.com/tendermint/tendermint/libs/pubsub/query"
+	tendermintTypes "github.com/tendermint/tendermint/types"
+	"google.golang.org/grpc"
 
 	app "github.com/comrade-coop/scynet-blockchain"
 	protobufs "github.com/comrade-coop/scynet-blockchain/cmd/scynetcomponent/protobufs"
@@ -23,11 +24,9 @@ import (
 )
 
 const (
-	storeAcc   = "acc"
-	storeAgent = "agent"
+	storeAgent    = "agent"
+	componentType = "external_blockchain"
 )
-
-var defaultCLIHome = os.ExpandEnv("$HOME/.nscli")
 
 func main() {
 	cdc := app.MakeCodec()
@@ -41,6 +40,13 @@ func main() {
 
 	agentCtx := agent.NewContext(cdc, storeAgent)
 
+	hatcheryConn, err := grpc.Dial("127.0.0.1:9998", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("failed to connect: %v", err)
+	}
+	defer hatcheryConn.Close()
+	hatcheryClient := protobufs.NewHatcheryClient(hatcheryConn)
+
 	server := componentServer{
 		agentCtx,
 	}
@@ -52,6 +58,76 @@ func main() {
 	grpcServer := grpc.NewServer()
 	protobufs.RegisterComponentServer(grpcServer, &server)
 	grpcServer.Serve(lis)
+
+	componentUUID := "252efc75-b125-4053-a611-9c2cc65823e0" // TODO: generate and store in config
+
+	hatcheryClient.RegisterComponent(context.Background(), &protobufs.ComponentRegisterRequest{
+		Uuid:       componentUUID,
+		Address:    "127.0.0.1:3451", // TODO: make configurable or pick proper bound address
+		RunnerType: []string{componentType},
+	})
+
+	cliCtx := sdkContext.NewCLIContext()
+
+	transactions := make(chan interface{})
+	cliCtx.Client.Subscribe(context.Background(), tendermintTypes.EventTx, tendermintQuery.Empty{}, transactions)
+
+	go func() {
+		ctx := context.Background()
+		for tx := range transactions {
+			tx := tx.(tendermintTypes.Tx)
+			var message sdk.Msg
+			err := cdc.UnmarshalBinaryBare(tx, &message)
+			if err != nil {
+				log.Fatalf("failed to unmarshal message: %v", err)
+				continue
+			}
+
+			switch message.(type) {
+			case agentTypes.MsgPublishAgentPrice:
+				message := message.(agentTypes.MsgPublishAgentPrice)
+				var uuid uuid.UUID = message.UUID
+				hatcheryClient.RegisterAgent(ctx, &protobufs.AgentRegisterRequest{
+					Agent: &protobufs.Agent{
+						Uuid:          uuid.String(),
+						ComponentType: componentType,
+						ComponentId:   componentUUID,
+						// Outputs: from domain,
+						// Frequency: from domain,
+						// TODO: different types of tokens? FIXME: Also, might overflow here!
+						Price: uint32(message.Price.AmountOf("scynet").BigInt().Uint64()),
+					},
+				})
+			case agentTypes.MsgPublishData:
+				message := message.(agentTypes.MsgPublishData)
+				var uuid uuid.UUID = message.UUID
+
+				var outputs = make([]*protobufs.Shape, len(message.Shapes))
+				for i := range message.Shapes {
+					dim := make([]uint32, len(message.Shapes[i]))
+					for j := range message.Shapes[i] {
+						dim[j] = uint32(message.Shapes[i][j])
+					}
+					outputs[i] = &protobufs.Shape{
+						Dimension: dim,
+					}
+				}
+
+				hatcheryClient.RegisterAgent(ctx, &protobufs.AgentRegisterRequest{
+					Agent: &protobufs.Agent{
+						Uuid:          uuid.String(),
+						ComponentType: componentType,
+						ComponentId:   componentUUID,
+						Outputs:       outputs,
+						// Frequency: uh...,
+						// TODO: different types of tokens? FIXME: Also, might overflow here!
+						Price: uint32(message.Price.AmountOf("scynet").BigInt().Uint64()),
+					},
+				})
+				// TODO: handle renting
+			}
+		}
+	}()
 }
 
 type componentServer struct {
